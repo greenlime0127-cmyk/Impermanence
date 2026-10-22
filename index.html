@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제행무상 (諸行無常) - 설정 위키</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        wiki: {
+                            bg: '#181a1b',
+                            card: '#222426',
+                            cardHeader: '#2a2c2e',
+                            border: '#36393c',
+                            blue: '#4a88c7',
+                            blueDark: '#3668a0',
+                            blueLight: '#263a50',
+                            text: '#d8dadf',
+                            textMuted: '#9aa0a6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #181a1b;
+            color: #d8dadf;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #181a1b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #36393c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a88c7;
+        }
+
+        /* Wiki Callout Box */
+        .wiki-quote {
+            border-left: 4px solid #4a88c7;
+            background-color: #202b38;
+            padding: 0.85rem 1.1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.375rem 0.375rem 0;
+        }
+
+        /* Table Styles */
+        .wiki-table th {
+            background-color: #2a2c2e;
+            border: 1px solid #36393c;
+            color: #70a8e0;
+            font-weight: 700;
+        }
+        .wiki-table td {
+            border: 1px solid #36393c;
+            background-color: #222426;
+        }
+
+        /* Pin Pop-up Animation for Map Hotspots */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 10px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+
+        /* Map Hotspot Wrapper */
+        .map-hotspot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 30;
+        }
+
+        /* Dot inside hotspot */
+        .map-hotspot-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.25s ease;
+        }
+
+        .map-hotspot:hover .map-hotspot-dot {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        /* Pin Tooltip Card - Positioned Directly Above Point */
+        .map-pin {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 6px;
+            z-index: 50;
+        }
+
+        /* Show tooltip directly above the dot on hover */
+        .map-hotspot:hover .map-pin {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="bg-wiki-cardHeader border-b border-wiki-border sticky top-0 z-40 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+            <!-- Title Branding (No Logo Image) -->
+            <div class="flex items-center space-x-3">
+                <a href="#" class="font-black text-xl tracking-tight text-white hover:text-wiki-blue transition">
+                    제행무상 <span class="text-sm font-normal text-wiki-textMuted">(諸行無常)</span>
+                </a>
+                <span class="text-xs bg-wiki-blueLight text-wiki-blue border border-wiki-blue/30 px-2.5 py-0.5 rounded-full font-semibold">
+                    공식 위키
+                </span>
+            </div>
+
+            <!-- Header Quick Nav Links -->
+            <nav class="hidden md:flex items-center space-x-6 text-xs text-wiki-textMuted font-medium">
+                <a href="#sec-1" class="hover:text-wiki-blue transition">1. 개요</a>
+                <a href="#sec-2" class="hover:text-wiki-blue transition">2. 공통 용어</a>
+                <a href="#sec-3" class="hover:text-wiki-blue transition">3. 등장 종족</a>
+                <a href="#sec-4" class="hover:text-wiki-blue transition">4. 등장 세력</a>
+                <a href="#sec-5" class="hover:text-wiki-blue transition">5. 월드맵</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 py-8 flex-1 w-full">
+
+        <!-- MAIN WIKI ARTICLE CONTENT (Full Width) -->
+        <main class="bg-wiki-card p-5 sm:p-8 rounded-lg shadow-lg border border-wiki-border">
+            
+            <!-- Article Title Header -->
+            <div class="border-b-2 border-wiki-blue pb-4 mb-6 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                    <div class="text-xs text-wiki-blue font-bold mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-folder-tree"></i> 분류: 동양 판타지 세계관 / 자작 세계관 설정
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-3">
+                        제행무상
+                        <span class="text-base font-normal text-wiki-textMuted">諸行無常</span>
+                    </h1>
+                </div>
+
+                <div class="text-xs text-wiki-textMuted flex items-center gap-2">
+                    <span class="bg-wiki-cardHeader border border-wiki-border px-3 py-1 rounded-md">
+                        <i class="fa-solid fa-clock-rotate-left mr-1 text-wiki-blue"></i> 설정집 최신화
+                    </span>
+                </div>
+            </div>
+
+            <!-- Notice Banner (Requested Sentence Only) -->
+            <div class="bg-wiki-blueLight/50 border border-wiki-blue/40 rounded-md p-3.5 mb-8 text-xs text-wiki-text flex items-center gap-3">
+                <i class="fa-solid fa-circle-info text-wiki-blue text-base shrink-0"></i>
+                <div class="leading-relaxed">
+                    <strong>[안내]</strong> 이 문서는 오리지널 세계관 제행무상(諸行無常)의 공식 설정 위키입니다.
+                </div>
+            </div>
+
+            <!-- INFOBOX & TOC WRAPPER -->
+            <div class="mb-8 flex flex-col md:flex-row-reverse gap-6 items-start">
+                
+                <!-- NAMUWIKI INFOBOX -->
+                <div class="w-full md:w-80 shrink-0 border-2 border-wiki-blue rounded-lg overflow-hidden shadow-md text-xs bg-wiki-card">
+                    <div class="bg-wiki-blue text-white font-bold text-center py-2 text-sm tracking-wide">
+                        세계관 프로필
+                    </div>
+                    <div class="bg-wiki-cardHeader text-white font-extrabold text-center py-2.5 text-base border-b border-wiki-border">
+                        제행무상 (諸行無常)
+                    </div>
+                    <!-- Table Grid Info -->
+                    <table class="w-full border-collapse text-left">
+                        <tbody>
+                            <tr class="border-b border-wiki-border">
+                                <th class="bg-wiki-cardHeader p-2.5 w-24 font-bold border-r border-wiki-border text-wiki-blue">장르</th>
+                                <td class="p-2.5">동양 판타지, 이세계, 초능력, 퇴마물</td>
+                            </tr>
+                            <tr class="border-b border-wiki-border">
+                                <th class="bg-wiki-cardHeader p-2.5 font-bold border-r border-wiki-border text-wiki-blue">차원 구조</th>
+                                <td class="p-2.5">속세 (人間界) & 문두스 (Mundus)</td>
+                            </tr>
+                            <tr class="border-b border-wiki-border">
+                                <th class="bg-wiki-cardHeader p-2.5 font-bold border-r border-wiki-border text-wiki-blue">주요 세력</th>
+                                <td class="p-2.5">무극대 (1~6무대), 귀환전, 도반, 북해빙궁</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-wiki-cardHeader p-2.5 font-bold border-r border-wiki-border text-wiki-blue">핵심 시스템</th>
+                                <td class="p-2.5">해방(解放), 웜홀(Wormhole)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE OF CONTENTS (TOC) -->
+                <div class="w-full md:flex-1 bg-wiki-cardHeader border border-wiki-border rounded-lg p-4 text-xs">
+                    <div class="flex items-center justify-between border-b border-wiki-border pb-2.5 mb-3">
+                        <span class="font-bold text-sm text-white flex items-center gap-2">
+                            <i class="fa-solid fa-list-ol text-wiki-blue"></i> 목차
+                        </span>
+                        <button onclick="toggleToc()" id="tocToggleBtn" class="text-wiki-blue hover:underline text-[11px] font-semibold">
+                            [접기]
+                        </button>
+                    </div>
+                    <ul id="tocList" class="space-y-2 leading-relaxed text-wiki-text font-medium pl-1">
+                        <li><a href="#sec-1" class="hover:text-wiki-blue hover:underline">1. 개요</a></li>
+                        <li><a href="#sec-2" class="hover:text-wiki-blue hover:underline">2. 공통 용어</a>
+                            <ul class="pl-4 mt-1 space-y-1 text-wiki-textMuted border-l border-wiki-border">
+                                <li><a href="#sec-2-1" class="hover:text-wiki-blue hover:underline">2.1. 속세</a></li>
+                                <li><a href="#sec-2-2" class="hover:text-wiki-blue hover:underline">2.2. 문두스 (Mundus)</a></li>
+                                <li><a href="#sec-2-3" class="hover:text-wiki-blue hover:underline">2.3. 웜홀 (Wormhole)</a></li>
+                                <li><a href="#sec-2-4" class="hover:text-wiki-blue hover:underline">2.4. 해방 (解放)</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#sec-3" class="hover:text-wiki-blue hover:underline">3. 등장 종족</a>
+                            <ul class="pl-4 mt-1 space-y-1 text-wiki-textMuted border-l border-wiki-border">
+                                <li><a href="#sec-3-1" class="hover:text-wiki-blue hover:underline">3.1. 사자 (使者)</a></li>
+                                <li><a href="#sec-3-2" class="hover:text-wiki-blue hover:underline">3.2. 마수 (魔獸)</a></li>
+                                <li><a href="#sec-3-3" class="hover:text-wiki-blue hover:underline">3.3. 초인 (超人)</a></li>
+                                <li><a href="#sec-3-4" class="hover:text-wiki-blue hover:underline">3.4. 사신 (使臣)</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#sec-4" class="hover:text-wiki-blue hover:underline">4. 등장 세력</a>
+                            <ul class="pl-4 mt-1 space-y-1 text-wiki-textMuted border-l border-wiki-border">
+                                <li><a href="#sec-4-1" class="hover:text-wiki-blue hover:underline">4.1. 무극대 (無極袋)</a></li>
+                                <li><a href="#sec-4-2" class="hover:text-wiki-blue hover:underline">4.2. 귀환전 (歸幻殿)</a></li>
+                                <li><a href="#sec-4-3" class="hover:text-wiki-blue hover:underline">4.3. 도반 (道伴)</a></li>
+                                <li><a href="#sec-4-4" class="hover:text-wiki-blue hover:underline">4.4. 북해빙궁 (北海氷宮)</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#sec-5" class="hover:text-wiki-blue hover:underline">5. 월드맵</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SECTION 1: OVERVIEW -->
+            <section id="sec-1" class="mb-10">
+                <h2 class="text-xl sm:text-2xl font-bold border-b border-wiki-border pb-2 mb-4 text-white">
+                    <span class="text-wiki-blue">1.</span> 개요
+                </h2>
+
+                <p class="leading-relaxed mb-3">
+                    <strong>제행무상(諸行無常)</strong>은 평범한 인간들이 거주하는 <span class="text-wiki-blue font-semibold">속세</span>와 초능력자 및 마수들이 존재하는 이세계인 <span class="text-wiki-blue font-semibold">문두스(Mundus)</span>를 배경으로 다루는 판타지 세계관이다.
+                </p>
+                <p class="leading-relaxed">
+                    차원 통로인 '웜홀'을 통해 두 세계가 연결되어 있으며, 마수들의 침입에 맞서 세계의 균형과 질서를 수호하기 위한 초인들과 사신 세력, 그리고 북해빙궁 등 각 지방 주요 세력의 치열한 암투와 전투가 전개된다.
+                </p>
+            </section>
+
+            <!-- SECTION 2: COMMON TERMS -->
+            <section id="sec-2" class="mb-10">
+                <h2 class="text-xl sm:text-2xl font-bold border-b border-wiki-border pb-2 mb-4 text-white">
+                    <span class="text-wiki-blue">2.</span> 공통 용어
+                </h2>
+
+                <div class="space-y-4 text-sm">
+                    <!-- 2.1 속세 -->
+                    <div id="sec-2-1" class="p-3.5 rounded bg-wiki-cardHeader border border-wiki-border">
+                        <h3 class="font-bold text-white text-base mb-1 text-wiki-blue">2.1. 속세</h3>
+                        <p class="text-wiki-text leading-relaxed">
+                            평범한 인간들이 살아가는 일반적인 세계이다. 기술과 문명이 발달했으나 초연성적인 영적 힘이나 마수의 존재에 대해서는 상식적으로 잘 알지 못한다.
+                        </p>
+                    </div>
+
+                    <!-- 2.2 문두스 -->
+                    <div id="sec-2-2" class="p-3.5 rounded bg-wiki-cardHeader border border-wiki-border">
+                        <h3 class="font-bold text-white text-base mb-1 text-wiki-blue">2.2. 문두스 (Mundus)</h3>
+                        <p class="text-wiki-text leading-relaxed">
+                            초인과 마수가 거주하는 이세계이다. 속세와는 달리 시대 발전 속도가 느리고, 가문의 전통과 역사를 매우 중시하며 고집하는 문화적 특징을 가진다.
+                        </p>
+                    </div>
+
+                    <!-- 2.3 웜홀 -->
+                    <div id="sec-2-3" class="p-3.5 rounded bg-wiki-cardHeader border border-wiki-border">
+                        <h3 class="font-bold text-white text-base mb-1 text-wiki-blue">2.3. 웜홀 (Wormhole)</h3>
+                        <p class="text-wiki-text leading-relaxed">
+                            속세와 문두스, 혹은 다른 차원 간을 오갈 수 있는 차원이동의 통로 개념이다.
+                        </p>
+                    </div>
+
+                    <!-- 2.4 해방 -->
+                    <div id="sec-2-4" class="p-3.5 rounded bg-wiki-cardHeader border border-wiki-border">
+                        <h3 class="font-bold text-white text-base mb-1 text-wiki-blue">2.4. 해방 (解放)</h3>
+                        <p class="text-wiki-text leading-relaxed">
+                            모든 초인이 공통으로 지닌 특수한 능력 체계. 자신의 능력을 한계 이상으로 극한까지 끌어올려, 평상시에는 사용할 수 없는 압도적이고 강력한 필살기를 발현하는 행위를 일컫는다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: RACES -->
+            <section id="sec-3" class="mb-10">
+                <h2 class="text-xl sm:text-2xl font-bold border-b border-wiki-border pb-2 mb-4 text-white">
+                    <span class="text-wiki-blue">3.</span> 등장 종족
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <!-- 사자 -->
+                    <div id="sec-3-1" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-wiki-blue mb-1.5 flex items-center justify-between">
+                            <span>사자 (使者)</span>
+                            <span class="text-[10px] bg-wiki-blueLight px-2 py-0.5 rounded border border-wiki-blue/30">초인 하위종족</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            계약을 통해 계약자의 소유 물건에 존속할 수 있는 능력을 가진 인물들이다. 초인의 하위 종족으로 분류되며, 존속 능력을 기본 바탕으로 지니면서 또 다른 고유 능력을 추가로 보유한 경우가 태반이다.
+                        </p>
+                    </div>
+
+                    <!-- 마수 -->
+                    <div id="sec-3-2" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-wiki-blue mb-1.5 flex items-center justify-between">
+                            <span>마수 (魔獸)</span>
+                            <span class="text-[10px] bg-red-950/60 text-red-300 px-2 py-0.5 rounded border border-red-800/40">적대/위험 종족</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            퇴마물에서 흔히 말하는 악령과 같은 존재들이다. 평범한 동물과 달리 신체 구조가 자연 법칙을 벗어나 있으며, 일부 상위 마수들은 인간의 지성과 언어, 더 나아가 인간의 외형 모습까지 습득할 수 있다. 속세에도 드나든다.
+                        </p>
+                    </div>
+
+                    <!-- 초인 -->
+                    <div id="sec-3-3" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-wiki-blue mb-1.5 flex items-center justify-between">
+                            <span>초인 (超人)</span>
+                            <span class="text-[10px] bg-wiki-blueLight px-2 py-0.5 rounded border border-wiki-blue/30">문두스 주요 종족</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            영적인 힘을 지닌 인물들로 초능력자라 할 수 있다. 문두스 대륙에 존재하는 등장인물들의 대부분이 초인에 해당한다. 대개 그들의 궁극적 목표는 마수를 퇴마하는 것이다.
+                        </p>
+                    </div>
+
+                    <!-- 사신 -->
+                    <div id="sec-3-4" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-wiki-blue mb-1.5 flex items-center justify-between">
+                            <span>사신 (使臣)</span>
+                            <span class="text-[10px] bg-emerald-950/60 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800/40">속세 수호종족</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            속세의 균형과 질서를 지키는 구원자 역할을 하는 인물들이다. 사신 종족들은 대부분 혈통과 가문을 통해 배출되는 특징을 보인다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: FACTIONS -->
+            <section id="sec-4" class="mb-10">
+                <h2 class="text-xl sm:text-2xl font-bold border-b border-wiki-border pb-2 mb-4 text-white">
+                    <span class="text-wiki-blue">4.</span> 등장 세력
+                </h2>
+
+                <!-- 4.1 무극대 -->
+                <div id="sec-4-1" class="mb-6 border border-wiki-border rounded-lg p-5 bg-wiki-cardHeader">
+                    <div class="flex items-center justify-between mb-3 border-b border-wiki-border pb-2">
+                        <h3 class="font-bold text-lg text-[#f39c12] flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-[#f39c12]"></i> 4.1. 무극대 (無極袋)
+                        </h3>
+                        <span class="text-xs bg-amber-950/50 text-[#f39c12] border border-amber-500/30 px-2.5 py-1 rounded font-semibold">
+                            연합 방어 군대
+                        </span>
+                    </div>
+                    <p class="text-xs text-wiki-text leading-relaxed mb-4">
+                        마수를 퇴마하고, 속세와 문두스를 수호하기 위해 조직된 연합 기구이자 군대이다. 총 1무대부터 6무대까지 조직되어 있으며 각각 대장, 부대장, 대원 구조로 나뉘어 임무를 수행한다.
+                    </p>
+
+                    <!-- Divisions Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs wiki-table">
+                            <thead>
+                                <tr>
+                                    <th class="p-2.5 text-center w-28">부대 구분</th>
+                                    <th class="p-2.5 text-left w-36">특징 / 역할</th>
+                                    <th class="p-2.5 text-left">대장</th>
+                                    <th class="p-2.5 text-left">부대장</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-center text-[#f39c12]">1무대</td>
+                                    <td class="p-2.5 text-wiki-textMuted">전투 주력 부대</td>
+                                    <td class="p-2.5 font-semibold text-white">올리브</td>
+                                    <td class="p-2.5 text-wiki-text">길리</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-center text-[#f39c12]">2무대</td>
+                                    <td class="p-2.5 text-wiki-textMuted">전투 선봉 부대</td>
+                                    <td class="p-2.5 font-semibold text-white">빅토리아</td>
+                                    <td class="p-2.5 text-wiki-text">유스토마</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-center text-[#f39c12]">3무대</td>
+                                    <td class="p-2.5 text-wiki-textMuted">기습 및 방어 부대</td>
+                                    <td class="p-2.5 font-semibold text-white">바르보사</td>
+                                    <td class="p-2.5 text-wiki-text">유나</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-center text-[#f39c12]">4무대</td>
+                                    <td class="p-2.5 text-wiki-textMuted">경계 및 특수전</td>
+                                    <td class="p-2.5 font-semibold text-white">데오다토</td>
+                                    <td class="p-2.5 text-wiki-text">나카츠카사</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-center text-[#f39c12]">5무대</td>
+                                    <td class="p-2.5 text-wiki-text font-semibold">기술과학연구대</td>
+                                    <td class="p-2.5 font-semibold text-white">빅터</td>
+                                    <td class="p-2.5 text-wiki-text">메이슨</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-center text-[#f39c12]">6무대</td>
+                                    <td class="p-2.5 text-wiki-text font-semibold">의료대</td>
+                                    <td class="p-2.5 font-semibold text-white">로렌조</td>
+                                    <td class="p-2.5 text-wiki-text">아이커</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4.2 귀환전, 4.3 도반, 4.4 북해빙궁 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div id="sec-4-2" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-[#e74c3c] mb-1.5 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-skull text-[#e74c3c]"></i> 4.2. 귀환전</span>
+                            <span class="text-[10px] bg-red-950/60 text-red-300 px-2 py-0.5 rounded border border-red-800/40">반체제</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            진화하여 고도의 지성과 형태를 갖춘 마수들이 모여 결성한 무극대의 반체제 적대 집단이다.
+                        </p>
+                    </div>
+
+                    <div id="sec-4-3" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-[#3498db] mb-1.5 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-scale-balanced text-[#3498db]"></i> 4.3. 도반</span>
+                            <span class="text-[10px] bg-sky-950/60 text-sky-300 px-2 py-0.5 rounded border border-sky-800/40">중립 세력</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            속세를 수호하는 사신들의 모임. 차원 간의 균열과 질서를 지키는 중재자 역할을 담당한다.
+                        </p>
+                    </div>
+
+                    <div id="sec-4-4" class="border border-wiki-border rounded-lg p-4 bg-wiki-cardHeader">
+                        <div class="font-bold text-sm text-cyan-400 mb-1.5 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-snowflake text-cyan-400"></i> 4.4. 북해빙궁</span>
+                            <span class="text-[10px] bg-cyan-950/60 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800/40">북해 영지</span>
+                        </div>
+                        <p class="text-wiki-text leading-relaxed">
+                            설원과 혹한이 펼쳐진 북해 지역의 독자적 세력이자 난공불락의 영지. 독자적인 마법과 힘을 보존하고 있다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: WORLD MAP -->
+            <section id="sec-5" class="mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold border-b border-wiki-border pb-2 mb-4 text-white">
+                    <span class="text-wiki-blue">5.</span> 월드맵
+                </h2>
+                
+                <p class="text-xs text-wiki-textMuted mb-3">
+                    <i class="fa-solid fa-hand-pointer text-wiki-blue mr-1"></i> 지도상의 각 위치 표식 점에 마우스 커서를 올리면 해당 위치 <strong>바로 위에 상세 설명 카드</strong>가 표시됩니다.
+                </p>
+
+                <!-- MAP INTERACTIVE CONTAINER -->
+                <div class="relative w-full rounded-lg overflow-visible border-2 border-wiki-border bg-black shadow-xl my-4">
+                    <!-- Base Map Image -->
+                    <img src="https://cdn.phototourl.com/member/2026-10-22-7202eb1a-f85f-494c-b1a6-2a90427f58ba.png" 
+                         alt="제행무상 월드맵" 
+                         class="w-full h-auto object-cover rounded-lg opacity-90">
+
+                    <!-- 1. 무극대 본부 -->
+                    <div class="map-hotspot" style="top: 50%; left: 50%;">
+                        <div class="map-hotspot-dot bg-[#f39c12] border-2 border-amber-200 shadow-[0_0_12px_rgba(243,156,18,0.9)] animate-pulse"></div>
+                        <div class="map-pin">
+                            <div class="bg-wiki-cardHeader/95 border-2 border-[#f39c12] text-white text-xs p-3 rounded-lg shadow-2xl min-w-[210px] text-center">
+                                <div class="font-bold text-[#f39c12] text-sm mb-1 flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-shield-halved"></i> <strong>무극대(無極袋)</strong>
+                                </div>
+                                <div class="text-[11px] text-wiki-text leading-snug">
+                                    마수 퇴마 및 속세와 문두스의 평화를 수호하는 연합 방어 군대의 중심 거점
+                                </div>
+                            </div>
+                            <div class="text-[#f39c12] text-center drop-shadow-[0_0_8px_rgba(243,156,18,0.9)] text-xl -mt-1">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. 귀환전 본거지 (위치 교체: 북쪽으로 이동) -->
+                    <div class="map-hotspot" style="top: 22%; left: 38%;">
+                        <div class="map-hotspot-dot bg-[#e74c3c] border-2 border-red-200 shadow-[0_0_12px_rgba(231,76,60,0.9)] animate-pulse"></div>
+                        <div class="map-pin">
+                            <div class="bg-wiki-cardHeader/95 border-2 border-[#e74c3c] text-white text-xs p-3 rounded-lg shadow-2xl min-w-[210px] text-center">
+                                <div class="font-bold text-[#e74c3c] text-sm mb-1 flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-skull"></i> <strong>귀환전(歸幻殿)</strong>
+                                </div>
+                                <div class="text-[11px] text-wiki-text leading-snug">
+                                    지성을 갖춘 변종 마수들이 집결한 무극대 대항 적대 집단의 은신처
+                                </div>
+                            </div>
+                            <div class="text-[#e74c3c] text-center drop-shadow-[0_0_8px_rgba(231,76,60,0.9)] text-xl -mt-1">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. 북해빙궁 (위치 교체: 남쪽으로 이동) -->
+                    <div class="map-hotspot" style="top: 65%; left: 28%;">
+                        <div class="map-hotspot-dot bg-cyan-400 border-2 border-cyan-100 shadow-[0_0_12px_rgba(34,211,238,0.9)] animate-pulse"></div>
+                        <div class="map-pin">
+                            <div class="bg-wiki-cardHeader/95 border-2 border-cyan-400 text-white text-xs p-3 rounded-lg shadow-2xl min-w-[210px] text-center">
+                                <div class="font-bold text-cyan-300 text-sm mb-1 flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-snowflake"></i> <strong>북해빙궁(北海氷宮)</strong>
+                                </div>
+                                <div class="text-[11px] text-wiki-text leading-snug">
+                                    극한의 설원과 혹한을 지배하는 북해 연방의 핵심 거점이자 강력한 고유 영지
+                                </div>
+                            </div>
+                            <div class="text-cyan-400 text-center drop-shadow-[0_0_8px_rgba(34,211,238,0.9)] text-xl -mt-1">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. 도반 회당 -->
+                    <div class="map-hotspot" style="top: 42%; left: 76%;">
+                        <div class="map-hotspot-dot bg-[#3498db] border-2 border-sky-200 shadow-[0_0_12px_rgba(52,152,219,0.9)] animate-pulse"></div>
+                        <div class="map-pin">
+                            <div class="bg-wiki-cardHeader/95 border-2 border-[#3498db] text-white text-xs p-3 rounded-lg shadow-2xl min-w-[210px] text-center">
+                                <div class="font-bold text-[#3498db] text-sm mb-1 flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-scale-balanced"></i> <strong>도반(道伴)</strong>
+                                </div>
+                                <div class="text-[11px] text-wiki-text leading-snug">
+                                    속세의 질서를 지키며 차원 간의 균열을 관측하는 사신들의 중립 집회소
+                                </div>
+                            </div>
+                            <div class="text-[#3498db] text-center drop-shadow-[0_0_8px_rgba(52,152,219,0.9)] text-xl -mt-1">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-wiki-cardHeader text-wiki-textMuted text-xs py-6 border-t border-wiki-border mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-bold text-wiki-text mb-1">제행무상 (諸行無常) - 공식 설정 위키</p>
+            <p class="text-[11px]">
+                본 문서는 오리지널 세계관 제행무상(諸行無常)의 공식 설정 문서입니다.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // TOGGLE TABLE OF CONTENTS
+        function toggleToc() {
+            const list = document.getElementById('tocList');
+            const btn = document.getElementById('tocToggleBtn');
+            if (list.classList.contains('hidden')) {
+                list.classList.remove('hidden');
+                btn.innerText = '[접기]';
+            } else {
+                list.classList.add('hidden');
+                btn.innerText = '[펼치기]';
+            }
+        }
+    </script>
+</body>
+</html>
